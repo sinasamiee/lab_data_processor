@@ -3,31 +3,35 @@ name: Build EXE for Windows 7
 on:
   push:
     branches:
-      - main # Runs on every push to the main branch
+      - main  # Runs on every push to the main branch
 
 jobs:
   build:
-    runs-on: windows-latest # Uses Windows virtual machine for building
+    runs-on: windows-latest  # Uses Windows virtual machine for building
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 # Checkout the repository code
+        uses: actions/checkout@v3  # Checkout the repository code
         
       - name: Set up Python
-        uses: actions/setup-python@v4 # Sets up Python for the workflow
+        uses: actions/setup-python@v4  # Sets up Python for the workflow
         with:
-          python-version: 3.7 # Python version compatible with Windows 7
+          python-version: 3.7  # Compatible with Windows 7
 
       - name: Install dependencies
         run: |
-          pip install pyinstaller # Install pyinstaller to convert .py to .exe
+          pip install pandas
+          pip install tabulate
+          pip install tk
+          pip install pyinstaller
+          pip install jalali-pandas
 
       - name: Build EXE
         run: |
-          pyinstaller --onefile --noconsole --distpath ./output final_lab_data_process.py # Create EXE with no console and Windows 7 compatibility
+          pyinstaller --onefile --noconsole --distpath ./output final_lab_data_process.py  # Uses your script name
 
       - name: Upload EXE as artifact
         uses: actions/upload-artifact@v3
         with:
           name: compiled-exe
-          path: ./output/*.exe # Specify the location of the generated .exe file
+          path: ./output/*.exe  # Uploads the built executable
