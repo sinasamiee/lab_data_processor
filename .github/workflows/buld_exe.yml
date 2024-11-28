@@ -30,4 +30,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: compiled-exe
-          path: ./output/lab_data_process.exe # Specify the location of the generated .exe file
+          path: ./output/*.exe # Specify the location of the generated .exe file
