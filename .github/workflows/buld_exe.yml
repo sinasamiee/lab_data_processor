@@ -27,21 +27,20 @@ jobs:
           pip install pyinstaller==4.2  # Use a version known to work well on Windows 7 and 10
           pip install jalali-pandas
 
-      - name: Ensure pyinstaller is in PATH
+      - name: Confirm PyInstaller Installation
         run: |
-          # Ensure PyInstaller is installed and in the system's PATH
-          $env:PATH += ";$env:ProgramFiles\Python37\Scripts"
-          pyinstaller --version  # Confirm that PyInstaller is installed
+          # Ensure PyInstaller is installed by using Python to call pyinstaller directly
+          python -m PyInstaller --version  # This calls pyinstaller via Python
 
       - name: Build EXE (64-bit by default)
         run: |
-          # Build the executable without noconsole to allow error visibility
-          pyinstaller --onefile --distpath ./output --win-private-assemblies --win-no-prefer-redirects final_lab_data_process.py  # No --noconsole flag for debugging
+          # Build the executable using Python to call PyInstaller
+          python -m PyInstaller --onefile --distpath ./output --win-private-assemblies --win-no-prefer-redirects final_lab_data_process.py  # No --noconsole flag for debugging
 
       # Optional: If you want to build for 32-bit, uncomment the next step and comment the 64-bit one
       # - name: Build EXE (32-bit)
       #   run: |
-      #     pyinstaller --onefile --distpath ./output --win-private-assemblies --win-no-prefer-redirects --arch x86 final_lab_data_process.py  # For 32-bit
+      #     python -m PyInstaller --onefile --distpath ./output --win-private-assemblies --win-no-prefer-redirects --arch x86 final_lab_data_process.py  # For 32-bit
 
       - name: Upload EXE and Logs as artifact
         uses: actions/upload-artifact@v3
