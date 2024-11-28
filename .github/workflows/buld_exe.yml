@@ -24,7 +24,7 @@ jobs:
 
       - name: Build EXE
         run: |
-          pyinstaller --onefile --noconsole --distpath "./final_lab_data_process.py" # Create EXE with no console and Windows 7 compatibility
+          pyinstaller --onefile --noconsole --distpath ./output final_lab_data_process.py # Create EXE with no console and Windows 7 compatibility
 
       - name: Upload EXE as artifact
         uses: actions/upload-artifact@v3
