@@ -1,4 +1,4 @@
-name: Build EXE for Windows 7
+name: Build EXE for Debugging (Windows 7 & 10)
 
 on:
   push:
@@ -7,31 +7,39 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest  # Uses Windows virtual machine for building
+    runs-on: windows-latest  # Uses a 64-bit Windows virtual machine for building
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3  # Checkout the repository code
         
-      - name: Set up Python
+      - name: Set up Python 3.7
         uses: actions/setup-python@v4  # Sets up Python for the workflow
         with:
-          python-version: 3.7  # Compatible with Windows 7
+          python-version: 3.7  # Compatible with Windows 7 and 10
 
       - name: Install dependencies
         run: |
           pip install pandas
           pip install tabulate
           pip install tk
-          pip install pyinstaller
+          pip install pyinstaller==4.2  # Use a version known to work well on Windows 7 and 10
           pip install jalali-pandas
 
-      - name: Build EXE
+      - name: Build EXE (64-bit by default)
         run: |
-          pyinstaller --onefile --noconsole --distpath ./output final_lab_data_process.py  # Uses your script name
+          # Build the executable without noconsole to allow error visibility
+          pyinstaller --onefile --distpath ./output --win-private-assemblies --win-no-prefer-redirects final_lab_data_process.py  # No --noconsole flag for debugging
 
-      - name: Upload EXE as artifact
+      # Optional: If you want to build for 32-bit, uncomment the next step and comment the 64-bit one
+      # - name: Build EXE (32-bit)
+      #   run: |
+      #     pyinstaller --onefile --distpath ./output --win-private-assemblies --win-no-prefer-redirects --arch x86 final_lab_data_process.py  # For 32-bit
+
+      - name: Upload EXE and Logs as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: compiled-exe
-          path: ./output/*.exe  # Uploads the built executable
+          name: compiled-exe-and-logs
+          path: |
+            ./output/*.exe  # Uploads the built executable
+            ./output/*.log  # Uploads any logs created by PyInstaller during the build process
