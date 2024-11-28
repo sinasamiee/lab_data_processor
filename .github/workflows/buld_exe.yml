@@ -20,11 +20,18 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip  # Ensure pip is up to date
           pip install pandas
           pip install tabulate
           pip install tk
           pip install pyinstaller==4.2  # Use a version known to work well on Windows 7 and 10
           pip install jalali-pandas
+
+      - name: Ensure pyinstaller is in PATH
+        run: |
+          # Ensure PyInstaller is installed and in the system's PATH
+          $env:PATH += ";$env:ProgramFiles\Python37\Scripts"
+          pyinstaller --version  # Confirm that PyInstaller is installed
 
       - name: Build EXE (64-bit by default)
         run: |
