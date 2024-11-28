@@ -1,4 +1,4 @@
-name: Build EXE
+name: Build EXE for Windows 7
 
 on:
   push:
@@ -7,16 +7,16 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest # This tells GitHub Actions to use a Windows runner
+    runs-on: windows-latest # Uses Windows virtual machine for building
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 # This checks out your repository's code
+        uses: actions/checkout@v3 # Checkout the repository code
         
       - name: Set up Python
         uses: actions/setup-python@v4 # Sets up Python for the workflow
         with:
-          python-version: 3.8.15 # Specify the Python version you want to use
+          python-version: 3.7 # Python version compatible with Windows 7
 
       - name: Install dependencies
         run: |
@@ -24,7 +24,7 @@ jobs:
 
       - name: Build EXE
         run: |
-          pyinstaller --noconfirm --onefile --windowed --distpath ./final_lab_data_process.py # Builds the .exe file
+          pyinstaller --onefile --noconsole --distpath ./final_lab_data_process.py # Create EXE with no console and Windows 7 compatibility
 
       - name: Upload EXE as artifact
         uses: actions/upload-artifact@v3
