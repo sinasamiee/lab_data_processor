@@ -246,7 +246,7 @@ def run_code():
   # ... (After processing, df_t should be your DataFrame) ...
   df_t = process_data(data_in_file)
   # Convert df_t to a string for display in the output area
-  df_t_str = df_t.to_csv(sep='\t',lineterminator='\n')
+  df_t_str = df_t.to_csv(sep='\t',line_terminator='\n')
   #df_t_str = tabulate(df_t, headers='keys', tablefmt='fancy_grid')
   #df_t_str = "DATE"+ df_t_str
   # Clear previous output and insert the new output
