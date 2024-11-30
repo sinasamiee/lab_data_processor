@@ -1,4 +1,4 @@
-name: Build EXE for Windows 7
+name: Build EXE for Windows 7 (32-bit)
 
 on:
   push:
@@ -7,16 +7,17 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest  # Uses Windows virtual machine for building
+    runs-on: windows-2016  # Compatible with older Windows versions
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3  # Checkout the repository code
         
-      - name: Set up Python
-        uses: actions/setup-python@v4  # Sets up Python for the workflow
+      - name: Set up Python (32-bit)
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.7  # Compatible with Windows 7
+          python-version: 3.7.9  # Final Python 3.7 version supporting Windows 7
+          architecture: x86  # 32-bit architecture
 
       - name: Install dependencies
         run: |
@@ -26,9 +27,9 @@ jobs:
           pip install pyinstaller
           pip install jalali-pandas
 
-      - name: Build EXE
+      - name: Build EXE for 32-bit
         run: |
-          pyinstaller --onefile --distpath ./output final_lab_data_process.py  # Uses your script name
+          pyinstaller --onefile --distpath ./output final_lab_data_process.py  # Replace with your script name
 
       - name: Upload EXE as artifact
         uses: actions/upload-artifact@v3
